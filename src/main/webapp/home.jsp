@@ -30,14 +30,24 @@
         }
         
         input[type="submit"] {
-            padding: 10px 20px;
+             padding: 10px 20px;
             font-size: 16px;
-            background-color: #4CAF50;
+            background-color: #008080;
             color: white;
             border: none;
             cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            animation: pulseAnimation 1s infinite;
+        }
+        input[type="submit"]:hover {
+            background-color: #4B0082;
         }
         
+        input[type="submit"]:active {
+            background-color: #DAA520;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -76,10 +86,64 @@
             40% { transform: scaleY(0.4); }
             100% { transform: scaleY(0.4); }
         }
+        
+        @keyframes pulseAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .login-button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #008080;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            animation: pulseAnimation 1s infinite;
+        }
+        
+        .login-button:hover {
+            background-color: #4B0082;
+        }
+        
+        .login-button:active {
+            background-color: #DAA520;
+        }
+        
+        .loader {
+            margin: 20px auto;
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            font-size: 10px;
+        }
+        
+        .loader span {
+            width: 5px;
+            height: 100%;
+            display: inline-block;
+            background-color: #4CAF50;
+            animation: loaderAnimation 1s infinite ease-in-out;
+        }
+        
     </style>
 </head>
 <body>
     <h1>Welcome to the Bookstore</h1>
+    <br>
+      <div class="login-button-container">
+        <button class="login-button" onclick="window.location.href='customer-login.jsp'">Customer Login</button>
+        <button class="login-button" onclick="window.location.href='admin-login.jsp'">Admin Login</button>
+    </div>
     
     <form method="get" action="home.jsp" onsubmit="showLoader()">
         <input type="text" name="search" placeholder="Search by title or author">
