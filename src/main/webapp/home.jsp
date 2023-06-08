@@ -81,7 +81,7 @@
 <body>
     <h1>Welcome to the Bookstore</h1>
     
-    <form method="get" action="index.jsp" onsubmit="showLoader()">
+    <form method="get" action="home.jsp" onsubmit="showLoader()">
         <input type="text" name="search" placeholder="Search by title or author">
         <input type="submit" value="Search">
     </form>
