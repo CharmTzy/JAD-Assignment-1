@@ -112,25 +112,31 @@
             </tr>
         </thead>
         <tbody>
-            <%-- Place your Java code here to fetch and display the search results --%>
             <% 
                 String searchQuery = request.getParameter("search");
                 if (searchQuery != null && !searchQuery.trim().isEmpty()) {
                     try {
                         // Step 1: Load JDBC Driver
-                        Class.forName("com.mysql.jdbc.Driver");
+                        Class.forName("com.mysql.cj.jdbc.Driver");
                         // Step 2: Define Connection URL
-                        String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
+                        String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
                         // Step 3: Establish connection to URL
                         Connection conn = DriverManager.getConnection(connURL);
-                        // Step 4: Create Statement object
-                        Statement stmt = conn.createStatement();
-                        // Step 5: Execute SQL Command
-                        String sqlStr = "SELECT * FROM books WHERE title LIKE '%" + searchQuery + "%' OR author LIKE '%" + searchQuery + "%'";
-                        ResultSet rs = stmt.executeQuery(sqlStr);
+                        // Step 4: Create PreparedStatement object
+                        // LIKE operator with %, allows you to search for books where the title or author contains the search query, regardless of the position within the string
+                        String sqlStr = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+                        PreparedStatement pstmt = conn.prepareStatement(sqlStr);
+                        // Step 5: Set query parameters using parameterized queries
+                        pstmt.setString(1, "%" + searchQuery + "%");
+                        pstmt.setString(2, "%" + searchQuery + "%");
+                        // Step 6: Execute SQL Query
+                        ResultSet rs = pstmt.executeQuery();
 
-                        // Step 6: Process Result
+                        // Step 7: Process Result
+                        boolean Results = false;
                         while (rs.next()) {
+                        	
+                        	Results = true;
                             String title = rs.getString("title");
                             String author = rs.getString("author");
                             double price = rs.getDouble("price");
@@ -158,9 +164,18 @@
                             <%  
                         }
             
-                        // Step 7: Close connection
+                        // Step 8: Close connection and statement
+                        rs.close();
+                        pstmt.close();
                         conn.close();
-                    } catch (Exception e) {
+                        if (!Results) {
+                            %>
+                            <tr>
+                                <td colspan="10">Sorry, the book is not available.</td>
+                            </tr>
+                            <% 
+                        }
+                    } catch (ClassNotFoundException e) {
                         out.println("Error: " + e);
                     }
                 }
