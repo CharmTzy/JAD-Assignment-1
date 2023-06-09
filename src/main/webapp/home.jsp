@@ -64,22 +64,6 @@
             color: white;
         }
         
-        .loader {
-            margin: 20px auto;
-            width: 50px;
-            height: 40px;
-            text-align: center;
-            font-size: 10px;
-        }
-        
-        .loader span {
-            width: 5px;
-            height: 100%;
-            display: inline-block;
-            background-color: #4CAF50;
-            animation: loaderAnimation 1s infinite ease-in-out;
-        }
-        
         @keyframes loaderAnimation {
             0% { transform: scaleY(0.4); }
             20% { transform: scaleY(1); }
@@ -143,6 +127,7 @@
       <div class="login-button-container">
         <button class="login-button" onclick="window.location.href='customer-login.jsp'">Customer Login</button>
         <button class="login-button" onclick="window.location.href='admin/adminLogin.jsp'">Admin Login</button>
+        <div class="dot"></div>
     </div>
     
     <form method="get" action="home.jsp" onsubmit="showLoader()">

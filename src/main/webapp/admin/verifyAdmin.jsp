@@ -10,7 +10,6 @@
 
 	<%
 	//---------------START - initialisation of variables--------------------
-	String userRole = "adminUser";
 
 	String username = request.getParameter("usernameOrEmail");
 	String password = request.getParameter("password");
@@ -57,10 +56,9 @@
 
 	if (found) {
 		//--------------Store values to the Session Object------------
-		session.setAttribute("sessUserID", username);
-		session.setAttribute("sessUserRole", userRole);
+		session.setAttribute("sessAdminID", username);
 		session.setAttribute("loginStatus", "success");
-		session.setMaxInactiveInterval(10); //to set valid time for the session , in this case 10sec
+		session.setMaxInactiveInterval(3); //to set valid time for the session , in this case 3sec
 
 		response.sendRedirect("displayAdmin.jsp"); //no need to encode URL , we be using session 
 	} else {
