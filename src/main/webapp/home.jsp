@@ -142,7 +142,7 @@
     <br>
       <div class="login-button-container">
         <button class="login-button" onclick="window.location.href='customer-login.jsp'">Customer Login</button>
-        <button class="login-button" onclick="window.location.href='admin-login.jsp'">Admin Login</button>
+        <button class="login-button" onclick="window.location.href='admin/adminLogin.jsp'">Admin Login</button>
     </div>
     
     <form method="get" action="home.jsp" onsubmit="showLoader()">
