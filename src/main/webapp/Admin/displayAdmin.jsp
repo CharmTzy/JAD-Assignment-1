@@ -11,7 +11,7 @@
 String AdminID = (String) session.getAttribute("sessAdminID");
 String loginStatus = (String) session.getAttribute("loginStatus");
 if ( AdminID == null || !loginStatus.equals("success")){
-	response.sendRedirect("adminLogin.jsp?errCode=invalidLogin");
+	response.sendRedirect("../Login.jsp?errCode=invalidLogin");
 }
 
 out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
@@ -176,8 +176,8 @@ out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
             <td><%= title %></td>
             <td><%= author %></td>
             <td>
-                <button>Edit</button>
-                <button>Delete</button>
+                <a href="updateBook.jsp?bookId=<%= bookId %>"><button>Edit</button></a>
+                <a href="deleteBook.jsp?bookId=<%= bookId %>"><button>Delete</button></a>
             </td>
         </tr>
         <% }

@@ -14,6 +14,7 @@
 	String username = request.getParameter("usernameOrEmail");
 	String password = request.getParameter("password");
 	Boolean found = false; //to indicate if user exits
+	String role = ""; // to store the user's role
 	//---------------ENd   - initialization of variables-------------------
 
 	int id;
@@ -31,7 +32,7 @@
 		Statement stmt = conn.createStatement();
 		// Step 5: Execute SQL Command
 
-		String sqlStr = "SELECT * FROM admin WHERE (username=? OR email=?) AND password=?";
+		String sqlStr = "SELECT * FROM user WHERE (username=? OR email=?) AND password=?";
 
 		PreparedStatement pstmt = conn.prepareStatement(sqlStr);
 		pstmt.setString(1, username);
@@ -43,6 +44,7 @@
 		if (rs.next()) {
 			System.out.print("record found!");
 			found = true;
+			 role = rs.getString("role");
 		} else {
 			//do nothing
 			System.out.print("record not found!");
@@ -58,11 +60,15 @@
 		//--------------Store values to the Session Object------------
 		session.setAttribute("sessAdminID", username);
 		session.setAttribute("loginStatus", "success");
-		session.setMaxInactiveInterval(3); //to set valid time for the session , in this case 3sec
+		session.setMaxInactiveInterval(60); //to set valid time for the session , in this case 60sec
 
-		response.sendRedirect("displayAdmin.jsp"); //no need to encode URL , we be using session 
+		if (role.equalsIgnoreCase("admin")) {
+            response.sendRedirect("Admin/displayAdmin.jsp");
+        } else if (role.equalsIgnoreCase("customer")) {
+            response.sendRedirect("displayCustomer.jsp");
+        } 
 	} else {
-		response.sendRedirect("adminLogin.jsp?errCode=invalidLogin");
+		response.sendRedirect("Login.jsp?errCode=invalidLogin");
 	}
 	%>
 

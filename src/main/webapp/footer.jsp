@@ -5,27 +5,27 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Footer</title>
 </head>
 <body>
-	<style>
-.footer-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100px;
-}
-
-.footer {
-	width: 10%;
-	height: 50px;
-	background-size: cover;
-	position: center;
-}
-</style>
-	<div class="footer-container">
-		<div class="footer"></div>
-	</div>
+		<style>
+		.footer-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100px;
+		}
+		
+		.footer {
+			width: 10%;
+			height: 50px;
+			background-size: cover;
+			position: center;
+		}
+		</style>
+			<div class="footer-container">
+				<div class="footer"></div>
+			</div>
 	<%
 	try {
 		// Step1: Load JDBC Driver

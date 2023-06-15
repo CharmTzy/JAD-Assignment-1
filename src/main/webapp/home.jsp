@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+           
         }
         
         h1 {
@@ -30,7 +32,7 @@
         }
         
         input[type="submit"] {
-             padding: 10px 20px;
+            padding: 10px 20px;
             font-size: 16px;
             background-color: #008080;
             color: white;
@@ -48,21 +50,32 @@
         input[type="submit"]:active {
             background-color: #DAA520;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
         
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
         
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+        position: sticky; /* Add this line to make the header sticky */
+        top: 0; /* Add this line to position the sticky header at the top */
+        z-index: 1; /* Add this line to ensure the header appears above the table content */
+    }
+
+    td {
+        background-color: #fff;
+    }
+   
         
         @keyframes loaderAnimation {
             0% { transform: scaleY(0.4); }
@@ -82,7 +95,7 @@
             margin-bottom: 20px;
         }
         
-        .login-button {
+        .login-button,.register-button {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #008080;
@@ -94,7 +107,13 @@
             transition: background-color 0.3s;
             animation: pulseAnimation 1s infinite;
         }
+        .register-button:hover {
+            background-color: #4B0082;
+        }
         
+        .register-button:active {
+            background-color: #DAA520;
+        }
         .login-button:hover {
             background-color: #4B0082;
         }
@@ -118,32 +137,28 @@
             background-color: #4CAF50;
             animation: loaderAnimation 1s infinite ease-in-out;
         }
-        
+        .footer {
+	        margin-left:700px;
+		    text-align: center;
+		    width: 100%;
+		    position: relative;
+		    margin-top: 20px;
+		}
+	    
     </style>
 </head>
 <body>
     <h1>Welcome to the Bookstore</h1>
     <br>
-      <div class="login-button-container">
-        <button class="login-button" onclick="window.location.href='customer-login.jsp'">Customer Login</button>
-        <button class="login-button" onclick="window.location.href='admin/adminLogin.jsp'">Admin Login</button>
-        <div class="dot"></div>
+    <div class="login-button-container">
+        <button class="register-button" onclick="window.location.href='Customer/customer_registration.jsp'">Customer Register</button>
+        <button class="login-button" onclick="window.location.href='Login.jsp'"> Login</button>
     </div>
     
     <form method="get" action="home.jsp" onsubmit="showLoader()">
         <input type="text" name="search" placeholder="Search by title or author">
         <input type="submit" value="Search">
     </form>
-    
-    <div id="loaderContainer" style="display: none;">
-        <div class="loader">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </div>
     
     <table>
         <thead>
@@ -161,81 +176,113 @@
             </tr>
         </thead>
         <tbody>
+        <tr id="loaderContainer" style="display: none;">
+        <td colspan="10">
+            <div class="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </td>
+    </tr>
             <% 
-                String searchQuery = request.getParameter("search");
-                if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-                    try {
-                        // Step 1: Load JDBC Driver
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        // Step 2: Define Connection URL
-                        String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
-                        // Step 3: Establish connection to URL
-                        Connection conn = DriverManager.getConnection(connURL);
-                        // Step 4: Create PreparedStatement object
-                        // LIKE operator with %, allows you to search for books where the title or author contains the search query, regardless of the position within the string
-                        String sqlStr = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
-                        PreparedStatement pstmt = conn.prepareStatement(sqlStr);
-                        // Step 5: Set query parameters using parameterized queries
-                        pstmt.setString(1, "%" + searchQuery + "%");
-                        pstmt.setString(2, "%" + searchQuery + "%");
-                        // Step 6: Execute SQL Query
-                        ResultSet rs = pstmt.executeQuery();
-
-                        // Step 7: Process Result
-                        boolean Results = false;
-                        while (rs.next()) {
-                        	
-                        	Results = true;
-                            String title = rs.getString("title");
-                            String author = rs.getString("author");
-                            double price = rs.getDouble("price");
-                            int quantity = rs.getInt("quantity");
-                            String publisher = rs.getString("publisher");
-                            String publicationDate = rs.getString("publication_date");
-                            String isbn = rs.getString("isbn");
-                            String genre = rs.getString("genre");
-                            double rating = rs.getDouble("rating");
-                            String description = rs.getString("description");
-                
-                            %>
-                            <tr>
-                                <td><%= title %></td>
-                                <td><%= author %></td>
-                                <td><%= price %></td>
-                                <td><%= quantity %></td>
-                                <td><%= publisher %></td>
-                                <td><%= publicationDate %></td>
-                                <td><%= isbn %></td>
-                                <td><%= genre %></td>
-                                <td><%= rating %></td>
-                                <td><%= description %></td>
-                            </tr>
-                            <%  
-                        }
+            String searchQuery = request.getParameter("search");
+            boolean hasResults = false;
             
-                        // Step 8: Close connection and statement
-                        rs.close();
-                        pstmt.close();
-                        conn.close();
-                        if (!Results) {
-                            %>
-                            <tr>
-                                <td colspan="10">Sorry, the book is not available.</td>
-                            </tr>
-                            <% 
-                        }
-                    } catch (ClassNotFoundException e) {
-                        out.println("Error: " + e);
-                    }
+            try {
+                // Step 1: Load JDBC Driver
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                
+                // Step 2: Define Connection URL
+                String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
+                
+                // Step 3: Establish connection to URL
+                Connection conn = DriverManager.getConnection(connURL);
+                
+                // Step 4: Create Statement object
+                Statement stmt = conn.createStatement();
+                
+                // Step 5: Execute SQL Query
+                String sqlStr = "SELECT * FROM books";
+                
+                // If search query is provided, modify the SQL query to filter results
+                if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                    sqlStr += " WHERE title LIKE '%" + searchQuery + "%' OR author LIKE '%" + searchQuery + "%'";
                 }
+                
+                ResultSet rs = stmt.executeQuery(sqlStr);
+                
+                // Step 6: Process Result
+                while (rs.next()) {
+                    hasResults = true;
+                    
+                    String title = rs.getString("title");
+                    String author = rs.getString("author");
+                    double price = rs.getDouble("price");
+                    int quantity = rs.getInt("quantity");
+                    String publisher = rs.getString("publisher");
+                    String publicationDate = rs.getString("publication_date");
+                    String isbn = rs.getString("isbn");
+                    String genre = rs.getString("genre");
+                    double rating = rs.getDouble("rating");
+                    String description = rs.getString("description");
+            
+                    %>
+                  
+                    <tr>
+                    
+                        <td><%= title %></td>
+                        <td><%= author %></td>
+                        <td><%= price %></td>
+                        <td><%= quantity %></td>
+                        <td><%= publisher %></td>
+                        <td><%= publicationDate %></td>
+                        <td><%= isbn %></td>
+                        <td><%= genre %></td>
+                        <td><%= rating %></td>
+                        <td><%= description %></td>
+                    </tr>
+                   
+                    <%
+                    
+                }
+                
+                // Step 7: Close connection
+                rs.close();
+                stmt.close();
+                conn.close();
+                
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            if (!hasResults) {
+            	
+                %>
+                <tr>
+                    <td colspan="10">No books found.</td>
+                </tr>
+                <%
+            }
             %>
         </tbody>
     </table>
-
+   
+    
+     <div class="footer">
+     
+        <%@ include file="/footer.jsp" %>
+        
+    </div>
     <script>
         function showLoader() {
-            document.getElementById("loaderContainer").style.display = "block";
+            document.getElementById('loaderContainer').style.display = 'table-row';
         }
+        
     </script>
 </body>
 </html>

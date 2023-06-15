@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login</title>
+    <title>Login Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,17 +53,37 @@
         input[type="submit"]:active {
             background-color: #3e8e41;
         }
+        .register-button-container {
+		text-align: center;
+		margin-top: 20px;
+		}
     </style>
 </head>
 <body>
+
     <div class="login-container">
-        <h1>Admin Login</h1>
-        <form method="post" action="verifyAdmin.jsp">
+    
+        <h1>Login</h1>
+        <%
+	String errCode = request.getParameter("errCode");
+	if (errCode != null && errCode.equals("invalidLogin")) {
+		out.println("<p style='color: red; text-align: center;'>You have entered an invalid ID/Password</p>");
+	}
+	%>
+        <form method="post" action="verify.jsp">
             <input type="text" name="usernameOrEmail" placeholder="Username or Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
         </form>
     </div><br>
+    
+    	<%-- Register button --%>
+	<div class="register-button-container">
+		<p>
+			Don't have an account? <a href="Customer/customer_registration.jsp">Register</a>
+		</p>
+	</div>
+    
 <%@ include file="/footer.jsp" %>
 
 </body>
