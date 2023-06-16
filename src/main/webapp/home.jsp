@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.Base64" %>
 <%@page import="java.sql.*"%>
 <!DOCTYPE html>
 <html>
@@ -51,31 +52,31 @@
             background-color: #DAA520;
         }
         
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #4CAF50;
-        color: white;
-        position: sticky; /* Add this line to make the header sticky */
-        top: 0; /* Add this line to position the sticky header at the top */
-        z-index: 1; /* Add this line to ensure the header appears above the table content */
-    }
-
-    td {
-        background-color: #fff;
-    }
-   
+	    table {
+	        width: 100%;
+	        border-collapse: collapse;
+	        table-layout: fixed;
+	        
+	    }
+	
+	    th, td {
+	        padding: 10px;
+	        text-align: left;
+	        border-bottom: 1px solid #ddd;
+	    }
+	
+	    th {
+	        background-color: #4CAF50;
+	        color: white;
+	        position: sticky; /* Add this line to make the header sticky */
+	        top: 0; /* Add this line to position the sticky header at the top */
+	        z-index: 1; /* Add this line to ensure the header appears above the table content */
+	    }
+	
+	    td {
+	        background-color: #fff;
+	    }
+	    
         
         @keyframes loaderAnimation {
             0% { transform: scaleY(0.4); }
@@ -163,6 +164,7 @@
     <table>
         <thead>
             <tr>
+             	<th>Image</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Price</th>
@@ -218,6 +220,12 @@
                 while (rs.next()) {
                     hasResults = true;
                     
+                    byte[] imageDataBytes = rs.getBytes("image");
+                    String base64Image = null;
+                    if (imageDataBytes != null) {
+                        base64Image = Base64.getEncoder().encodeToString(imageDataBytes);
+                    }
+
                     String title = rs.getString("title");
                     String author = rs.getString("author");
                     double price = rs.getDouble("price");
@@ -232,7 +240,7 @@
                     %>
                   
                     <tr>
-                    
+                    	<td><img src="data:image/jpeg;base64, <%= base64Image %>" width="100" height="150" /></td>
                         <td><%= title %></td>
                         <td><%= author %></td>
                         <td><%= price %></td>
