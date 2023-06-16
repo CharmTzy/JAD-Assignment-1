@@ -65,7 +65,7 @@
 		if (role.equalsIgnoreCase("admin")) {
             response.sendRedirect("Admin/displayAdmin.jsp");
         } else if (role.equalsIgnoreCase("customer")) {
-            response.sendRedirect("displayCustomer.jsp");
+            response.sendRedirect("Customer/displayCustomer.jsp");
         } 
 	} else {
 		response.sendRedirect("Login.jsp?errCode=invalidLogin");

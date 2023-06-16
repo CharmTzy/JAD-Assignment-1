@@ -4,17 +4,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Admin DashBook</title>
 </head>
 <body>
 <%
+
 String AdminID = (String) session.getAttribute("sessAdminID");
 String loginStatus = (String) session.getAttribute("loginStatus");
 if ( AdminID == null || !loginStatus.equals("success")){
 	response.sendRedirect("../Login.jsp?errCode=invalidLogin");
 }
 
-out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
 %>
 
 <style>
@@ -22,12 +24,18 @@ out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        .container {
+		  display: flex;
+		  align-items: center;
+		}
+        
         h1 {
             color: #333;
+             display: inline-block;
         }
         h2 {
             color: #666;
-            margin-top: 30px;
+            margin-top: 50px;
         }
         form {
             margin-top: 20px;
@@ -69,14 +77,126 @@ out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
             color: #999;
         }
         .description-field {
-        display: flex;
+        display: flex;  
         align-items: center;
         }
         .description-field textarea {
         margin-left: 15px;
         }
+        .quantity-buttons {
+		  display: flex;
+		  align-items: center;
+		}
+		 .button-group {
+		  display: flex;
+		  flex-direction: column;
+		}
+		.quantity-buttons form {
+		  margin-right: 10px;
+		}
+		
+		.quantity-value {
+		  margin: 0 10px;
+		}
+		
+		.quantity-button.plus {
+		  margin-bottom: 10px;
+		}
+		
+		.quantity-button.minus {
+		  margin-bottom: 10px;
+		  
+		}
+		.value-field{
+		margin-top:10px;
+		width: 40px;
+		}
+		.container {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    float: right;
+	    flex-wrap: wrap;
+	    margin-top: 20px;
+	    margin-right: 80px;
+	   
+	  }
+	  
+	  .role {
+	    display: flex;
+	    align-items: center;
+	   
+	  }
+	
+	  .role a {
+	    display: flex;
+	    justify-content: center;
+	    width: 50px;
+	    border-radius: 5px;
+	  }
+	
+	  .slider-container {
+	    display: none;
+	    padding: 20px;
+	    background-color: #f2f2f2;
+	    margin-top: 50px;
+	    position: absolute;
+	  }
     </style>
+    
     <h1>Admin Page</h1>
+    <div class="container">
+     <div class="role">
+     
+    <a>
+      <i class="fas fa-address-card"></i> 
+    </a>
+    <h4 class="admin-id"> <%= AdminID %></h4>
+
+  </div>
+    
+
+  <div class="slider-container">
+ 
+  <%  
+try {
+  Class.forName("com.mysql.jdbc.Driver");
+  String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
+  Connection conn = DriverManager.getConnection(connURL);
+  Statement stmt = conn.createStatement();
+
+  String sqlStr = "SELECT * FROM user WHERE username = ? OR email = ?";
+  PreparedStatement pstmt = conn.prepareStatement(sqlStr);
+  pstmt.setString(1, AdminID);
+  pstmt.setString(2, AdminID);
+  ResultSet rs = pstmt.executeQuery();
+
+  if (rs.next()) {
+    String username = rs.getString("username");
+    String email = rs.getString("email");
+    String role = rs.getString("role");
+%>
+    
+    <p>Username: <%= username %></p>
+    <p>Email: <%= email %></p>
+    <p>Role: <%= role %></p>
+<% 
+  } else {
+%>
+    <p>No user found.</p>
+<%
+  }
+  rs.close();
+  pstmt.close();
+  conn.close();
+} catch (Exception e) {
+  e.printStackTrace();
+}
+%>
+
+
+</div>
+     </div>
 
     <%-- Create a new book form --%>
     <h2>Create a new book:</h2>
@@ -106,8 +226,10 @@ out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
         <input type="submit" value="Create">
     </form>
 
+
+	<%-- Insert new book data into the database --%>
     <% 
-        // Insert new book data into the database
+        
         if (request.getParameter("title") != null) {
             String title = request.getParameter("title");
             String author = request.getParameter("author");
@@ -145,47 +267,111 @@ out.print("<h1>Welcome!.." + AdminID + "</h1><br>");
             }
         }
     %>
+
+	
+
+
+<%-- Display existing books --%>
+<h2>Existing books:</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Quantity</th>
+        <th>Actions</th>
+        
+    </tr>
+    <%
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
+        Connection conn = DriverManager.getConnection(connURL);
+        Statement stmt = conn.createStatement();
+
+        String sqlStr = "SELECT * FROM books";
+        ResultSet rs = stmt.executeQuery(sqlStr);
+
+        while (rs.next()) {
+            String bookId = rs.getString("id");
+            String title = rs.getString("title");
+            String author = rs.getString("author");
+            int inventory = rs.getInt("quantity");
+    %>
+    <tr>
+        <td><%= title %></td>
+        <td><%= author %></td>
+        <td>
+            <div class="quantity-buttons">
             
-            
-            
-    <%-- Display existing books --%>
-    <h2>Existing books:</h2>
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Actions</th>
-        </tr>
-        <%-- Retrieve books from the database --%>
-        <%
+                <form method="post" action="displayAdmin.jsp">
+                    <input type="hidden" name="bookId" value="<%= bookId %>">
+                    <input type="hidden" name="currentInventory" value="<%= inventory %>">
+                    <button class="quantity-button plus" type="submit" name="addQuantity">+</button>
+                </form>
+                <div class="value-field">
+                <span class="quantity-value"><%= inventory %></span>
+              </div>
+                <div class="button-group">
+                <form method="post" action="displayAdmin.jsp">
+                    <input type="hidden" name="bookId" value="<%= bookId %>">
+                    <input type="hidden" name="currentInventory" value="<%= inventory %>">
+                    <button class="quantity-button minus" type="submit" name="reduceQuantity">-</button>
+                </form>
+                  </div>
+            </div>
+        </td>
+        <td>
+            <a href="updateBook.jsp?bookId=<%= bookId %>"><button>Edit</button></a>
+            <a href="deleteBook.jsp?bookId=<%= bookId %>"><button>Delete</button></a>
+        </td>
+        
+    </tr>
+    <% }
+        conn.close();
+    } catch (Exception e) {
+        out.println("Error: " + e);
+    }
+
+    // Update book quantity
+    if (request.getParameter("addQuantity") != null || request.getParameter("reduceQuantity") != null) {
+        String bookId = request.getParameter("bookId");
+        int currentInventory = Integer.parseInt(request.getParameter("currentInventory"));
+
+        int newInventory = currentInventory;
+        if (request.getParameter("addQuantity") != null) {
+            newInventory++;
+        } else if (request.getParameter("reduceQuantity") != null) {
+            newInventory--;
+            if (newInventory < 0) {
+                newInventory = 0;
+            }
+        }
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
             Connection conn = DriverManager.getConnection(connURL);
-            Statement stmt = conn.createStatement();
-
-            String sqlStr = "SELECT * FROM books";
-            ResultSet rs = stmt.executeQuery(sqlStr);
-
-            while (rs.next()) {
-                String bookId = rs.getString("id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-        %>
-        <tr>
-            <td><%= title %></td>
-            <td><%= author %></td>
-            <td>
-                <a href="updateBook.jsp?bookId=<%= bookId %>"><button>Edit</button></a>
-                <a href="deleteBook.jsp?bookId=<%= bookId %>"><button>Delete</button></a>
-            </td>
-        </tr>
-        <% }
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE books SET quantity = ? WHERE id = ?");
+            pstmt.setInt(1, newInventory);
+            pstmt.setString(2, bookId);
+            pstmt.executeUpdate();
+            pstmt.close();
             conn.close();
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
+            out.println("Error: " + e);
+        } catch (SQLException e) {
             out.println("Error: " + e);
         }
-        %>
-    </table>
+    }
+    %>
+</table>
+<script>
+$(document).ready(function() {
+    $(".role").click(function() {
+      $(".slider-container").slideToggle();
+    });
+  });
+  </script>
+
 </body>
 </html>

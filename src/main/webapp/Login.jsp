@@ -71,8 +71,8 @@
 	}
 	%>
         <form method="post" action="verify.jsp">
-            <input type="text" name="usernameOrEmail" placeholder="Username or Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="usernameOrEmail" pattern="[a-zA-Z0-9\s@.]+" title="Only characters and numbers are allowed" placeholder="Username or Email" required>
+            <input type="password" name="password"  placeholder="Password" required>
             <input type="submit" value="Login">
         </form>
     </div><br>
