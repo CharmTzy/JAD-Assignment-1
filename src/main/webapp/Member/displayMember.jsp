@@ -13,10 +13,10 @@
 
 String CustomerID = (String) session.getAttribute("sessCustomerID");
 String loginStatus = (String) session.getAttribute("loginStatus");
+
 if ( CustomerID == null || !loginStatus.equals("success")){
 	response.sendRedirect("../Login.jsp?errCode=invalidLogin");
 }
-
 %>
 
 <style>
@@ -175,12 +175,17 @@ try {
     String username = rs.getString("username");
     String email = rs.getString("email");
     String role = rs.getString("role");
+    String address = rs.getString("address");
+    String phnumber = rs.getString("phnumber");
 %>
     
     <p>Username: <%= username %></p>
     <p>Email: <%= email %></p>
     <p>Role: <%= role %></p>
+    <p>Address: <%= address %></p>
+    <p>Phone Number:<%= phnumber %></p>
     <a href="updateMember.jsp">Update Profile</a>
+    
 <% 
   } else {
 %>

@@ -152,7 +152,7 @@
     <h1>Welcome to the Bookstore</h1>
     <br>
     <div class="login-button-container">
-        <button class="register-button" onclick="window.location.href='Member/customer_registration.jsp'">Customer Register</button>
+        <button class="register-button" onclick="window.location.href='Member/customer_registration.jsp'">Member Register</button>
         <button class="login-button" onclick="window.location.href='Login.jsp'"> Login</button>
     </div>
     

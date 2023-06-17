@@ -149,6 +149,22 @@ if ( AdminID == null || !loginStatus.equals("success")){
 	    margin-top: 50px;
 	    position: absolute;
 	  }
+	  .update-profile-btn,
+	  .logout-btn {
+	    display: inline-block;
+	    padding: 10px 20px;
+	    background-color: #4caf50;
+	    color: #fff;
+	    text-decoration: none;
+	    border-radius: 4px;
+	    font-size: 14px;
+	    margin-right: 10px;
+	  }
+	
+	  .update-profile-btn:hover,
+	  .logout-btn:hover {
+	    background-color: #45a049;
+	  }
     </style>
     
     <h1>Admin Dashboard</h1>
@@ -179,14 +195,20 @@ try {
   ResultSet rs = pstmt.executeQuery();
 
   if (rs.next()) {
-    String username = rs.getString("username");
-    String email = rs.getString("email");
-    String role = rs.getString("role");
-%>
-    
-    <p>Username: <%= username %></p>
-    <p>Email: <%= email %></p>
-    <p>Role: <%= role %></p>
+	    String username = rs.getString("username");
+	    String email = rs.getString("email");
+	    String role = rs.getString("role");
+	    String address = rs.getString("address");
+	    String phnumber = rs.getString("phnumber");
+	%>
+	    
+	    <p>Username: <%= username %></p>
+	    <p>Email: <%= email %></p>
+	    <p>Role: <%= role %></p>
+	    <p>Address: <%= address %></p>
+	    <p>Phone Number:<%= phnumber %></p>
+	    <a href="updateAdmin.jsp" class="update-profile-btn">Update Profile</a>
+		<a href="../Login.jsp?logout=true" class="logout-btn">Logout</a>
 <% 
   } else {
 %>

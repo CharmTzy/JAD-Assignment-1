@@ -10,7 +10,7 @@
 
 	<%
 	//---------------START - initialisation of variables--------------------
-
+	
 	String username = request.getParameter("usernameOrEmail");
 	String password = request.getParameter("password");
 	Boolean found = false; //to indicate if user exits

@@ -65,6 +65,15 @@
     
         <h1>Login</h1>
         <%
+        String logout = request.getParameter("logout");
+
+        if (logout != null && logout.equals("true")) {
+            // Invalidate the session to log out the user
+            session.invalidate();
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+        
 	String errCode = request.getParameter("errCode");
 	if (errCode != null && errCode.equals("invalidLogin")) {
 		out.println("<p style='color: red; text-align: center;'>You have entered an invalid ID/Password</p>");

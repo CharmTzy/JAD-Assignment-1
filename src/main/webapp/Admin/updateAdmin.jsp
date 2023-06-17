@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Update Customer Page</title>
+    <title>Update Admin Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,30 +63,66 @@
     </style>
 </head>
 <body>
+
 <%
-String CustomerID = (String) session.getAttribute("sessCustomerID");
+
+String AdminID = (String) session.getAttribute("sessAdminID");
 String loginStatus = (String) session.getAttribute("loginStatus");
-if (CustomerID == null || !loginStatus.equals("success")) {
+if (AdminID == null || !loginStatus.equals("success")) {
     response.sendRedirect("../Login.jsp?errCode=invalidLogin");
-}
+}else {
+	String email = "";
+    String address = "";
+    String phnumber = "";
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
+        Connection conn = DriverManager.getConnection(connURL);
+
+        String sql = "SELECT email, address, phnumber FROM user WHERE username = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, AdminID);
+
+        ResultSet rs = pstmt.executeQuery();
+        
+
+        if (rs.next()) {
+            email = rs.getString("email");
+            address = rs.getString("address");
+            phnumber = rs.getString("phnumber");
+        }
+
+        rs.close();
+        pstmt.close();
+        conn.close();
+    }catch(ClassNotFoundException | SQLException e) {
+        response.sendRedirect("../Login.jsp?update=error");
+    	
+    	}
+
 %>
 
-<h1>Update Customer Profile</h1>
-<form action="updateMember.jsp" method="POST">
+
+<h1>Update Admin Profile</h1>
+<form action="updateAdmin.jsp" method="POST">
     <label for="username">Username:</label>
-    <input type="text" id="username" name="username" value="<%= CustomerID %>" readonly><br><br>
+<input type="text" id="username" name="username" value="<%= AdminID %>" readonly><br><br>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
+<label for="email">Email:</label>
+<input type="email" id="email" name="email" value="<%= email %>" required><br><br>
 
-    <label for="address">Address:</label>
-    <input type="text" id="address" name="address" required><br><br>
+<label for="address">Address:</label>
+<input type="text" id="address" name="address" value="<%= address %>" required><br><br>
 
-    <label for="phnumber">Phone Number:</label>
-    <input type="text" id="phnumber" name="phnumber" required><br><br>
-
-    <input type="submit" value="Update">
+<label for="phnumber">Phone Number:</label>
+<input type="text" id="phnumber" name="phnumber" value="<%= phnumber %>" required><br><br>
+<input type="submit" value="Update">
 </form>
+<%} %>
+
+
+
+
 <% 
 
     String username = request.getParameter("username");
@@ -111,7 +147,7 @@ if (CustomerID == null || !loginStatus.equals("success")) {
         conn.close();
 
         if (rowsAffected > 0) {
-            response.sendRedirect("displayMember.jsp?update=success");
+            response.sendRedirect("displayAdmin.jsp?update=success");
         } 
     } catch (ClassNotFoundException | SQLException e) {
         response.sendRedirect("../Login.jsp?update=error");
