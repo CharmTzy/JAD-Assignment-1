@@ -80,7 +80,7 @@
     	<%-- Register button --%>
 	<div class="register-button-container">
 		<p>
-			Don't have an account? <a href="Customer/customer_registration.jsp">Register</a>
+			Don't have an account? <a href="Member/customer_registration.jsp">Register</a>
 		</p>
 	</div>
     

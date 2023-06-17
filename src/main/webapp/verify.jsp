@@ -32,7 +32,7 @@
 		Statement stmt = conn.createStatement();
 		// Step 5: Execute SQL Command
 
-		String sqlStr = "SELECT * FROM user WHERE (username=? OR email=?) AND password=?";
+		String sqlStr = "SELECT * FROM user WHERE (username=? OR email=?) AND BINARY password=?";
 
 		PreparedStatement pstmt = conn.prepareStatement(sqlStr);
 		pstmt.setString(1, username);
@@ -59,13 +59,14 @@
 	if (found) {
 		//--------------Store values to the Session Object------------
 		session.setAttribute("sessAdminID", username);
+		session.setAttribute("sessCustomerID", username);
 		session.setAttribute("loginStatus", "success");
 		session.setMaxInactiveInterval(60); //to set valid time for the session , in this case 60sec
 
 		if (role.equalsIgnoreCase("admin")) {
             response.sendRedirect("Admin/displayAdmin.jsp");
-        } else if (role.equalsIgnoreCase("customer")) {
-            response.sendRedirect("Customer/displayCustomer.jsp");
+        } else if (role.equalsIgnoreCase("member")) {
+            response.sendRedirect("Member/displayMember.jsp");
         } 
 	} else {
 		response.sendRedirect("Login.jsp?errCode=invalidLogin");

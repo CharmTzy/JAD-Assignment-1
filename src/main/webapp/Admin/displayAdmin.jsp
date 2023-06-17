@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Admin DashBook</title>
+    <title>Admin DashBoard</title>
 </head>
 <body>
 <%
@@ -44,6 +44,13 @@ if ( AdminID == null || !loginStatus.equals("success")){
         label {
             display: inline-block;
             width: 200px;
+        }
+         input[type="file"],
+        textarea {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+            margin-left:10px;
         }
         input[type="text"],
         textarea {
@@ -144,7 +151,7 @@ if ( AdminID == null || !loginStatus.equals("success")){
 	  }
     </style>
     
-    <h1>Admin Page</h1>
+    <h1>Admin Dashboard</h1>
     <div class="container">
      <div class="role">
      
@@ -200,7 +207,8 @@ try {
 
     <%-- Create a new book form --%>
     <h2>Create a new book:</h2>
-    <form method="post" action="displayAdmin.jsp">
+    <form method="post" action="displayAdmin.jsp" >
+	    
         <label>Title:</label>
         <input type="text" name="title" required><br><br>
         <label>Author:</label>
@@ -227,46 +235,54 @@ try {
     </form>
 
 
-	<%-- Insert new book data into the database --%>
-    <% 
-        
-        if (request.getParameter("title") != null) {
-            String title = request.getParameter("title");
-            String author = request.getParameter("author");
-            double price = Double.parseDouble(request.getParameter("price"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String publisher = request.getParameter("publisher");
-            String publicationDate = request.getParameter("publicationDate");
-            String isbn = request.getParameter("isbn");
-            String genre = request.getParameter("genre");
-            double rating = Double.parseDouble(request.getParameter("rating"));
-            String description = request.getParameter("description");
 
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
-                Connection conn = DriverManager.getConnection(connURL);
-                PreparedStatement pstmt = conn.prepareStatement("INSERT INTO books (title, author, price, quantity, publisher, publication_date, isbn, genre, rating, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                pstmt.setString(1, title);
-                pstmt.setString(2, author);
-                pstmt.setDouble(3, price);
-                pstmt.setInt(4, quantity);
-                pstmt.setString(5, publisher);
-                pstmt.setString(6, publicationDate);
-                pstmt.setString(7, isbn);
-                pstmt.setString(8, genre);
-                pstmt.setDouble(9, rating);
-                pstmt.setString(10, description);
-                pstmt.executeUpdate();
-                pstmt.close();
-                conn.close();
-            } catch (ClassNotFoundException e) {
-                out.println("Error: " + e);
-            } catch (SQLException e) {
-                out.println("Error: " + e);
-            }
-        }
-    %>
+
+	<%-- Insert new book data into the database --%>
+<%
+    
+    if (request.getParameter("title") != null) {
+        // Retrieve form field values
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String publisher = request.getParameter("publisher");
+        String publicationDate = request.getParameter("publicationDate");
+        String isbn = request.getParameter("isbn");
+        String genre = request.getParameter("genre");
+        double rating = Double.parseDouble(request.getParameter("rating"));
+        String description = request.getParameter("description");
+        
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
+            Connection conn = DriverManager.getConnection(connURL);
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO books (title, author, price, quantity, publisher, publication_date, isbn, genre, rating, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            pstmt.setString(1, title);
+            pstmt.setString(2, author);
+            pstmt.setDouble(3, price);
+            pstmt.setInt(4, quantity);
+            pstmt.setString(5, publisher);
+            pstmt.setString(6, publicationDate);
+            pstmt.setString(7, isbn);
+            pstmt.setString(8, genre);
+            pstmt.setDouble(9, rating);
+            pstmt.setString(10, description);
+
+           
+            pstmt.executeUpdate();
+            pstmt.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            out.println("Error: " + e);
+        } catch (SQLException e) {
+            out.println("Error: " + e);
+        } 
+        
+    }
+%>
+
 
 	
 
@@ -277,7 +293,7 @@ try {
     <tr>
         <th>Title</th>
         <th>Author</th>
-        <th>Quantity</th>
+        <th>Inventory</th>
         <th>Actions</th>
         
     </tr>
