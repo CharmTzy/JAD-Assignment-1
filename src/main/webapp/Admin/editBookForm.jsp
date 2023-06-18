@@ -16,7 +16,7 @@
 	- Description 		: JAD Assignment 1
 	- Admission no		: P2235080
 	- Class 			: DIT/FT/2A/02
---%>
+--%>	
     <meta charset="UTF-8">
     <title>Edit Book Form</title>
     <style>
