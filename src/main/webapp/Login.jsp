@@ -6,6 +6,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
+    <%--
+	- Author 			: Wai Yan Aung
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2234993
+	- Class 			: DIT/FT/2A/02
+--%>
+    <%--
+	- Author 			: Zayar Hpoun Myint
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2235080
+	- Class 			: DIT/FT/2A/02
+--%>
     <style>
         body {
             font-family: Arial, sans-serif;

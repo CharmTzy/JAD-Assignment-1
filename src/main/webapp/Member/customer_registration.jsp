@@ -2,6 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%--
+	- Author 			: Wai Yan Aung
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2234993
+	- Class 			: DIT/FT/2A/02
+--%>
+    <%--
+	- Author 			: Zayar Hpoun Myint
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2235080
+	- Class 			: DIT/FT/2A/02
+--%>
     <meta charset="UTF-8">
     <title>Customer Registration</title>
     <style>
@@ -87,6 +101,10 @@
         <input type="text" name="email" placeholder="Email" required>
         <br>
         <input type="password" name="password" placeholder="Password" required>
+        <br>
+        <input type="text" name="address" placeholder="Address" required>
+        <br>
+        <input type="text" name="phnumber" placeholder="Phone Number" required>
         <br>
         <input type="submit" value="Register">
     </form>

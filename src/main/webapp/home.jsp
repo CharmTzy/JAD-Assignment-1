@@ -7,6 +7,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Bookstore</title>
+    <%--
+	- Author 			: Wai Yan Aung
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2234993
+	- Class 			: DIT/FT/2A/02
+--%>
+    <%--
+	- Author 			: Zayar Hpoun Myint
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2235080
+	- Class 			: DIT/FT/2A/02
+--%>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -149,17 +163,22 @@
     </style>
 </head>
 <body>
+
     <h1>Welcome to the Bookstore</h1>
     <br>
     <div class="login-button-container">
+   
         <button class="register-button" onclick="window.location.href='Member/customer_registration.jsp'">Member Register</button>
         <button class="login-button" onclick="window.location.href='Login.jsp'"> Login</button>
+         <button class ="register-button" onclick ="window.location.href='genre.jsp'">Search By Genre</button>
     </div>
     
     <form method="get" action="home.jsp" onsubmit="showLoader()">
         <input type="text" name="search" placeholder="Search by title or author">
         <input type="submit" value="Search">
     </form>
+    
+   
     
     <table>
         <thead>
@@ -195,10 +214,10 @@
             
             try {
                 // Step 1: Load JDBC Driver
-                Class.forName("com.mysql.cj.jdbc.Driver");
+                Class.forName("com.mysql.jdbc.Driver");
                 
                 // Step 2: Define Connection URL
-                String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC&useSSL=false";
+               String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
                 
                 // Step 3: Establish connection to URL
                 Connection conn = DriverManager.getConnection(connURL);
@@ -207,8 +226,10 @@
                 Statement stmt = conn.createStatement();
                 
                 // Step 5: Execute SQL Query
-                String sqlStr = "SELECT * FROM books";
+                String sqlStr = "SELECT books.*, genre.genre FROM books INNER JOIN genre ON books.genre_id = genre.id";
+
                 
+               
                 // If search query is provided, modify the SQL query to filter results
                 if (searchQuery != null && !searchQuery.trim().isEmpty()) {
                     sqlStr += " WHERE title LIKE '%" + searchQuery + "%' OR author LIKE '%" + searchQuery + "%'";
@@ -220,12 +241,10 @@
                 while (rs.next()) {
                     hasResults = true;
                     
-                    byte[] imageDataBytes = rs.getBytes("image");
-                    String base64Image = null;
-                    if (imageDataBytes != null) {
-                        base64Image = Base64.getEncoder().encodeToString(imageDataBytes);
-                    }
-
+                    String imagePath = rs.getString("image");
+                    String imageUrl = "image/" + imagePath;
+                    
+                    
                     String title = rs.getString("title");
                     String author = rs.getString("author");
                     double price = rs.getDouble("price");
@@ -240,17 +259,17 @@
                     %>
                   
                     <tr>
-                    	<td><img src="data:image/jpeg;base64, <%= base64Image %>" width="100" height="150" /></td>
+                    	<td><img src="<%= imageUrl %>" width="100" height="150" /></td>
                         <td><%= title %></td>
-                        <td><%= author %></td>
-                        <td><%= price %></td>
-                        <td><%= quantity %></td>
-                        <td><%= publisher %></td>
-                        <td><%= publicationDate %></td>
-                        <td><%= isbn %></td>
-                        <td><%= genre %></td>
-                        <td><%= rating %></td>
-                        <td><%= description %></td>
+				        <td><%= author %></td>
+				        <td><%= price %></td>
+				        <td><%= quantity %></td>
+				        <td><%= publisher %></td>
+				        <td><%= publicationDate %></td>
+				        <td><%= isbn %></td>
+				        <td><%= genre %></td>
+				        <td><%= rating %></td>
+				        <td><%= description %></td>
                     </tr>
                    
                     <%
@@ -272,11 +291,13 @@
             	
                 %>
                 <tr>
-                    <td colspan="10">No books found.</td>
+                    <td colspan="11">No books found.</td>
                 </tr>
                 <%
             }
             %>
+            
+ 
         </tbody>
     </table>
    

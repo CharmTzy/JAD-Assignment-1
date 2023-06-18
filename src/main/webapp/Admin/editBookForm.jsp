@@ -3,10 +3,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%--
+	- Author 			: Wai Yan Aung
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2234993
+	- Class 			: DIT/FT/2A/02
+--%>
+    <%--
+	- Author 			: Zayar Hpoun Myint
+	- Date 				: 19/06/2023
+	- Description 		: JAD Assignment 1
+	- Admission no		: P2235080
+	- Class 			: DIT/FT/2A/02
+--%>
     <meta charset="UTF-8">
     <title>Edit Book Form</title>
     <style>
-        body {
+         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
@@ -71,9 +85,10 @@ int quantity = 0;
 String publisher = "";
 String publicationDate = "";
 String isbn = "";
-String genre = "";
+int genreId = 0;
 double rating = 0.0;
 String description = "";
+String genre = ""; // New variable to hold genre information
 
 boolean found = false;
 
@@ -94,9 +109,18 @@ try {
         publisher = rs.getString("publisher");
         publicationDate = rs.getString("publication_date");
         isbn = rs.getString("isbn");
-        genre = rs.getString("genre");
+        genreId = rs.getInt("genre_id");
         rating = rs.getDouble("rating");
         description = rs.getString("description");
+
+        // Retrieve the genre information from the 'genre' table
+        PreparedStatement genreStmt = conn.prepareStatement("SELECT genre FROM genre WHERE id = ?");
+        genreStmt.setInt(1, genreId);
+        ResultSet genreRs = genreStmt.executeQuery();
+        if (genreRs.next()) {
+            genre = genreRs.getString("genre");
+        }
+        genreStmt.close();
     }
 
     pstmt.close();

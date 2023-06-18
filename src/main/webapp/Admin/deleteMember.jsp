@@ -19,24 +19,24 @@
 	- Class 			: DIT/FT/2A/02
 --%>
     <meta charset="UTF-8">
-    <title>Delete Book</title>
+    <title>Delete Member</title>
 </head>
 <body>
 <%
-String bookId = request.getParameter("bookId");
+String memberId = request.getParameter("memberId");
 
 try {
     Class.forName("com.mysql.jdbc.Driver");
     String connURL = "jdbc:mysql://localhost/book_db?user=JAD&password=root@123mml&serverTimezone=UTC";
     Connection conn = DriverManager.getConnection(connURL);
-    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM books WHERE id = ?");
-    pstmt.setString(1, bookId);
+    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM user WHERE id = ?");
+    pstmt.setString(1, memberId);
     int count = pstmt.executeUpdate();
 
     pstmt.close();
     conn.close();
 
-    response.sendRedirect("displayAdmin.jsp?successMsg=Book deleted successfully.");
+    response.sendRedirect("displayAdmin.jsp?successMsg=Member deleted successfully.");
 } catch (Exception e) {
     out.println("Error: " + e);
 }
